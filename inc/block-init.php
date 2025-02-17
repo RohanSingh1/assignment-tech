@@ -27,10 +27,10 @@ function assessment_acf_init_blocks() {
 
 		acf_register_block_type(
 			array(
-				'name'            => 'home-banner',
-				'title'           => 'Assessment: Home Banner',
-				'description'     => 'assessment: Home Banner',
-				'render_template' => 'inc/blocks/home-banner.php',
+				'name'            => 'featured-projects',
+				'title'           => 'Assessment: Featured Projects',
+				'description'     => 'assessment: Featured Projects',
+				'render_template' => 'inc/blocks/featured-projects.php',
 				'category'        => 'assessment-block',
 				'icon'            => 'assessment-block-icon',
 			)
