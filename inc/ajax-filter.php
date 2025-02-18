@@ -4,7 +4,7 @@ function ajax_filter_projects() {
     $args = array(
         'post_type'      => 'project',
         'posts_per_page' => 6,
-        'paged'          => $_POST['page'] ?? 1
+        'paged'          => $_POST['page'] ?? 1,
     );
 
     // Handle search
@@ -16,20 +16,26 @@ function ajax_filter_projects() {
         add_filter('posts_search', function ($search, $query) use ($search_term) {
             global $wpdb;
             if ($query->is_search() && !is_admin()) {
-                $search = " AND {$wpdb->posts}.post_title LIKE '%" . esc_sql($search_term) . "%' ";
+                return " AND {$wpdb->posts}.post_title LIKE '%" . esc_sql($search_term) . "%' ";
             }
             return $search;
         }, 10, 2);
     }
 
     // Handle taxonomy filters
-    foreach (['project_type', 'city', 'project_cat'] as $tax) {
-        if (!empty($_POST[$tax])) {
-            $args['tax_query'][] = array(
-                'taxonomy' => $tax,
+    $taxonomies = [
+        'filter_project_type' => 'project_type',
+        'filter_city' => 'city',
+        'filter_project_cat' => 'project_cat'
+    ];
+
+    foreach ($taxonomies as $post_key => $taxonomy) {
+        if (!empty($_POST[$post_key])) {
+            $args['tax_query'][] = [
+                'taxonomy' => $taxonomy,
                 'field'    => 'slug',
-                'terms'    => explode(',', sanitize_text_field($_POST[$tax])),
-            );
+                'terms'    => explode(',', sanitize_text_field($_POST[$post_key])),
+            ];
         }
     }
 

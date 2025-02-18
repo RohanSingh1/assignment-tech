@@ -22,13 +22,23 @@
                     <?php } ?>
                 </a>
             </div>
-            
+
+            <!-- Mobile Menu Toggle Button -->
+            <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
+                <svg width="89" height="72" viewBox="0 0 134 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="49" y="49" width="56" height="6" fill="black"/>
+                    <rect x="49" y="66" width="56" height="6" fill="black"/>
+                    <rect x="49" y="32" width="56" height="6" fill="black"/>
+                </svg>
+            </button>
+
             <nav class="main-menu">
                 <?php
                 wp_nav_menu( array(
                     'theme_location' => 'primary',
                     'menu_class'     => 'nav-menu',
-                    'container'      => false
+                    'container'      => false,
+                    'menu_id'        => 'primary-menu'
                 ) );
                 ?>
             </nav>
@@ -37,5 +47,32 @@
 </header>
 
 <?php wp_footer(); ?>
+
+<!-- Mobile Menu Script -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const menu = document.querySelector(".main-menu");
+
+    menuToggle.addEventListener("click", function () {
+        const isExpanded = menuToggle.getAttribute("aria-expanded") === "true";
+        menuToggle.setAttribute("aria-expanded", !isExpanded);
+        menu.classList.toggle("active");
+    });
+});
+</script>
+
+<!-- Mobile Menu Styles -->
+<style>
+
+/* Show the toggle button on tablets & mobile */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+}
+</style>
+
 </body>
 </html>
+

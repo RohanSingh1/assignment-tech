@@ -7,11 +7,31 @@ $link = get_field('link');
 <section class="featured-projects">
     <div class="container">
     <h2>Featured Projects</h2>
+    <div class="featured-product-slider-wrapper">
+    <div class="featured-product-slider">
+    <?php
+        // Set up the query arguments
+        $args = array(
+            'post_type' => 'project',
+            'posts_per_page' => 3, // Default to 1 posts if no number is set
+            'post_status' => 'publish',
+            'orderby' => 'date',
+            'order' => 'DESC'
+        );
+
+        // The Query
+        $query = new WP_Query($args);
+
+        // The Loop
+        if ($query->have_posts()) :
+            while ($query->have_posts()): $query->the_post();
+                get_template_part('template-parts/content', 'project');
+            endwhile; endif; wp_reset_postdata(); 
+        ?>
+    </div>
+    </div>
     <div class="featured-projects-grid">
         <?php
-        // Get the number of posts from the ACF field
-        $number_of_posts = get_field('number_of_posts'); // Assuming this is set globally or in the options page
-
         // Set up the query arguments
         $args = array(
             'post_type' => 'project',

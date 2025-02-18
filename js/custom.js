@@ -4,10 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateQueryParams() {
         let params = {
             search: document.getElementById("project-search").value,
-            project_type: document.getElementById("filter-project-type").value,
-            city: document.getElementById("filter-city").value,
-            project_cat: document.getElementById("filter-category").value,
-            status: document.getElementById("filter-status") ? document.getElementById("filter-status").value : ""
+            filter_project_type: document.getElementById("filter-project-type").value,
+            filter_city: document.getElementById("filter-city").value,
+            filter_project_cat: document.getElementById("filter-category").value
         };
 
         // Remove empty parameters
@@ -22,13 +21,9 @@ document.addEventListener("DOMContentLoaded", function () {
         data.append("action", "filter_projects");
         data.append("page", page);
         data.append("search", document.getElementById("project-search").value);
-        data.append("project_type", document.getElementById("filter-project-type").value);
-        data.append("city", document.getElementById("filter-city").value);
-        data.append("project_cat", document.getElementById("filter-category").value);
-        let statusElement = document.getElementById("filter-status");
-        if (statusElement) {
-            data.append("status", statusElement.value);
-        }
+        data.append("filter_project_type", document.getElementById("filter-project-type").value);
+        data.append("filter_city", document.getElementById("filter-city").value);
+        data.append("filter_project_cat", document.getElementById("filter-category").value);
 
         fetch(ajax_data.ajax_url, {
             method: "POST",
@@ -57,14 +52,9 @@ document.addEventListener("DOMContentLoaded", function () {
         let params = new URLSearchParams(window.location.search);
 
         document.getElementById("project-search").value = params.get("search") || "";
-        document.getElementById("filter-project-type").value = params.get("project_type") || "";
-        document.getElementById("filter-city").value = params.get("city") || "";
-        document.getElementById("filter-category").value = params.get("project_cat") || "";
-
-        let statusElement = document.getElementById("filter-status");
-        if (statusElement) {
-            statusElement.value = params.get("status") || "";
-        }
+        document.getElementById("filter-project-type").value = params.get("filter_project_type") || "";
+        document.getElementById("filter-city").value = params.get("filter_city") || "";
+        document.getElementById("filter-category").value = params.get("filter_project_cat") || "";
 
         fetchProjects();
     }
@@ -95,11 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("filter-city").value = "";
             document.getElementById("filter-category").value = "";
 
-            let statusElement = document.getElementById("filter-status");
-            if (statusElement) {
-                statusElement.value = "";
-            }
-
             page = 1;
             updateQueryParams();
             fetchProjects();
@@ -108,4 +93,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     applyFiltersFromURL();
     addEventListeners();
+});
+
+
+jQuery(document).ready(function($) {
+    $('.featured-product-slider').slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: true,
+        dots: true,
+        infinite: true,
+        adaptiveHeight: true
+    });
 });
