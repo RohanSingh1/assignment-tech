@@ -48,31 +48,6 @@
 
 <?php wp_footer(); ?>
 
-<!-- Mobile Menu Script -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const menuToggle = document.querySelector(".menu-toggle");
-    const menu = document.querySelector(".main-menu");
-
-    menuToggle.addEventListener("click", function () {
-        const isExpanded = menuToggle.getAttribute("aria-expanded") === "true";
-        menuToggle.setAttribute("aria-expanded", !isExpanded);
-        menu.classList.toggle("active");
-    });
-});
-</script>
-
-<!-- Mobile Menu Styles -->
-<style>
-
-/* Show the toggle button on tablets & mobile */
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-    }
-}
-</style>
-
 </body>
 </html>
 

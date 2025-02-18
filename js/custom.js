@@ -95,6 +95,18 @@ document.addEventListener("DOMContentLoaded", function () {
     addEventListeners();
 });
 
+// menu toggle
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const menu = document.querySelector(".main-menu");
+
+    menuToggle.addEventListener("click", function () {
+        const isExpanded = menuToggle.getAttribute("aria-expanded") === "true";
+        menuToggle.setAttribute("aria-expanded", !isExpanded);
+        menu.classList.toggle("active");
+    });
+});
+
 
 jQuery(document).ready(function($) {
     $('.featured-product-slider').slick({
