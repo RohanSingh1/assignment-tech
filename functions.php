@@ -61,3 +61,14 @@ require get_template_directory() . '/inc/cpt.php';
  * Custom svg+icon.
  */
 require get_template_directory() . '/inc/icon.php';
+
+function flattenArray($array, &$result = []) {
+    foreach ($array as $value) {
+        if (is_array($value)) {
+            flattenArray($value, $result);
+        } else {
+            $result[] = $value;
+        }
+    }
+    return $result;
+}

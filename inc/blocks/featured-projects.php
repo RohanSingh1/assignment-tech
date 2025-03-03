@@ -81,18 +81,24 @@ $link = get_field('link');
         // Get the number of posts from the ACF field
         $number_of_posts = get_field('number_of_posts'); // Assuming this is set globally or in the options page
 
-        // Set up the query arguments
         $args = array(
-            'post_type' => 'project',
-            'posts_per_page' => 2,
-            'offset' => 1,
-            'post_status' => 'publish',
-            'orderby' => 'date',
-            'order' => 'DESC'
+            'post_type'      => 'project',
+            'posts_per_page' => 3, // Default to 3 posts if no number is set
+            'post_status'    => 'publish',
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+            'meta_query'     => array(
+                array(
+                    'key'     => 'is_featured', // ACF field name
+                    'value'   => '1', // Looking for posts where is_featured is true
+                    'compare' => '='
+                )
+            )
         );
 
         // The Query
         $query = new WP_Query($args);
+
 
         // The Loop
         if ($query->have_posts()) :

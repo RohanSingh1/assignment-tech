@@ -1,4 +1,22 @@
 <?php
+function search_by_title_only($search, $wp_query) {
+    global $wpdb;
+
+    if (!empty($search) && !empty($wp_query->query_vars['search_terms'])) {
+        $q = $wp_query->query_vars;
+        $n = !empty($q['exact']) ? '' : '%';
+
+        $search_terms = array_map(function($term) use ($wpdb, $n) {
+            return $wpdb->prepare("$wpdb->posts.post_title LIKE %s", $n . $wpdb->esc_like($term) . $n);
+        }, (array) $q['search_terms']);
+
+        $search = ' AND (' . implode(' AND ', $search_terms) . ')';
+    }
+
+    return $search;
+}
+add_filter('posts_search', 'search_by_title_only', 10, 2);
+
 // AJAX: Load Projects with Filtering
 function ajax_filter_projects() {
     $args = array(
@@ -7,26 +25,16 @@ function ajax_filter_projects() {
         'paged'          => $_POST['page'] ?? 1,
     );
 
-    // Handle search
+    // Handle search (Title-only)
     if (!empty($_POST['search'])) {
-        $search_term = sanitize_text_field($_POST['search']);
-        $args['s'] = $search_term;
-
-        // Search only in post titles
-        add_filter('posts_search', function ($search, $query) use ($search_term) {
-            global $wpdb;
-            if ($query->is_search() && !is_admin()) {
-                return " AND {$wpdb->posts}.post_title LIKE '%" . esc_sql($search_term) . "%' ";
-            }
-            return $search;
-        }, 10, 2);
+        $args['s'] = sanitize_text_field($_POST['search']);
     }
 
     // Handle taxonomy filters
     $taxonomies = [
         'filter_project_type' => 'project_type',
-        'filter_city' => 'city',
-        'filter_project_cat' => 'project_cat'
+        'filter_city'         => 'city',
+        'filter_project_cat'  => 'project_cat'
     ];
 
     foreach ($taxonomies as $post_key => $taxonomy) {
@@ -40,6 +48,8 @@ function ajax_filter_projects() {
     }
 
     $query = new WP_Query($args);
+
+    remove_filter('posts_search', 'search_by_title_only', 10); // Remove filter after search
 
     if ($query->have_posts()) {
         while ($query->have_posts()) {
